@@ -3,7 +3,7 @@ from AutoJudge import check_task
 def solve(number):
 
     while (number>0):
-        if(number%41==0):
+        if(number%30==0):
             return number
         else:
             number-=1

@@ -4,13 +4,14 @@ from tkinter import simpledialog
 import random
 import numpy as np
 #def
+key_encode = 1234
 blank_data = {
             "student_id": "Not connected!",
             "student_name": "Not connected",
-            "task_1": 0,
-            "task_2": 0,
-            "task_3": 0,
-            "task_4": 0,
+            "task_1": -key_encode,
+            "task_2": -key_encode,
+            "task_3": -key_encode,
+            "task_4": -key_encode,
         }
 def load_current_result():
     data = blank_data
@@ -22,7 +23,7 @@ def load_current_result():
     data["student_name"] = data_load_from_file.item().get("student_name")
 
     for i in range(4):
-        data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1))
+        data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1)) + key_encode
 
     return data
 def refresh():

@@ -1,12 +1,14 @@
 import numpy as np
 
+key_encode = 1234
+
 blank_data = {
             "student_id": "Not connected!",
             "student_name": "Not connected",
-            "task_1": 0,
-            "task_2": 0,
-            "task_3": 0,
-            "task_4": 0,
+            "task_1": -key_encode,
+            "task_2": -key_encode,
+            "task_3": -key_encode,
+            "task_4": -key_encode,
         }
 def check_task_0 (fn_name,fn_student_id):
     name ="Not connected!"
@@ -63,20 +65,22 @@ def save_data(data):
 def update_score(task,score):
     data = load_current_result()
 
-    data[task]= score
+    data[task]= score-key_encode
 
     save_data(data)
 
-def load_test(fileName):
-    load_data = np.load(fileName, allow_pickle=True)
+def load_test(test_name):
+    load_data = np.load("answer.npy", allow_pickle=True)
 
-    tests = load_data.item().get("test")
-    answers = load_data.item().get("answer")
+    answer = load_data.item().get(test_name+"_answer")
+
+    tests = answer ["test"] #load_data.item().get("test")
+    answers =  answer ["answer"] #load_data.item().get("answer")
 
     return tests,answers
 def check_task(fn,name_task):
 
-    tests,answers = load_test(name_task+"_res.npy")
+    tests,answers = load_test(name_task)
     nTest = len(answers)
     score = 0
 
