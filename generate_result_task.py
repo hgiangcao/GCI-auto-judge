@@ -1,8 +1,8 @@
 import numpy as np
 import random
 
-
 def generate_task_1_results():
+
     dict={}
     nTest = 200
     tests=[]
@@ -22,7 +22,8 @@ def generate_task_1_results():
     dict["test"] = tests
     dict["answer"] = answers
 
-    np.save("task_1_res.npy", dict)
+    return dict
+
 
 def generate_task_2_results():
     dict={}
@@ -40,7 +41,8 @@ def generate_task_2_results():
     dict["test"] = tests
     dict["answer"] = answers
 
-    np.save("task_2_res.npy", dict)
+    #np.save("task_2_res.npy", dict)
+    return dict
 
 def generate_task_3_results():
     dict={}
@@ -66,7 +68,8 @@ def generate_task_3_results():
     dict["test"] = tests
     dict["answer"] = answers
 
-    np.save("task_3_res.npy", dict)
+    #np.save("task_3_res.npy", dict)
+    return dict
 
 
 def generate_task_4_results():
@@ -93,7 +96,8 @@ def generate_task_4_results():
     dict["test"] = tests
     dict["answer"] = answers
 
-    np.save("task_4_res.npy", dict)
+    #np.save("task_4_res.npy", dict)
+    return dict
 
 def generate_task_5_results():
     dict={}
@@ -115,10 +119,22 @@ def generate_task_5_results():
     dict["test"] = tests
     dict["answer"] = answers
 
-    np.save("task_4_res.npy", dict)
+    #np.save("task_4_res.npy", dict)
+    return dict
 
-generate_task_1_results()
-generate_task_2_results()
-generate_task_3_results()
-generate_task_4_results()
-generate_task_5_results()
+def generate_all_task_answer():
+    dict_answer = {}
+    i = 1
+    dict_answer["task_"+str(i)+"_answer"] = generate_task_1_results()
+    i+=1
+    dict_answer["task_"+str(i)+"_answer"] = generate_task_2_results()
+    i += 1
+    dict_answer["task_"+str(i)+"_answer"] = generate_task_3_results()
+    i += 1
+    dict_answer["task_"+str(i)+"_answer"] = generate_task_4_results()
+    # dict_answer["task_"+i+"_answer"] =generate_task_5_results()
+
+    np.save("answer.npy", dict_answer)
+
+
+generate_all_task_answer()
