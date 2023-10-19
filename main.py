@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import Entry
 from tkinter import font as tkFont
 from tkinter import simpledialog
 import random
@@ -13,6 +14,14 @@ blank_data = {
             "task_3": -key_encode,
             "task_4": -key_encode,
         }
+
+def set_text(entry,text):
+    entry.configure(state='normal')
+    entry.delete(0,END)
+    entry.insert(0,text)
+    entry.configure(state='disabled')
+    return
+
 def load_current_result():
     data = blank_data
 
@@ -28,7 +37,7 @@ def load_current_result():
     return data
 def refresh():
 
-    global total_score,detail_score,lb_total_score,student_id,name
+    global total_score,detail_score,lb_total_score,student_id,name,txt_student_id,txt_student_name,lb_detail_score
 
     data =load_current_result()
 
@@ -36,8 +45,12 @@ def refresh():
     name = data["student_name"]
     student_id = data["student_id"]
 
-    lb_student_name.config(text="Student Name:" + name)
-    lb_student_id.config(text="Student ID:" + student_id)
+    if (name is None or student_id is None):
+        name = "Not connected!"
+        student_id = "Not connected!"
+
+    set_text(txt_student_id, student_id)
+    set_text(txt_student_name, name)
 
     for i in range (n_problem):
         detail_score[i] = data["task_"+str(i+1)]
@@ -47,35 +60,49 @@ def refresh():
 
     return
 
-def updateInformation(edit=True):
-    data = load_current_result()
+def saveInformation ():
+    global txt_student_id, txt_student_name,btn_edit
 
-    name = data["student_name"]
-    student_id = data["student_id"]
-    print (name,student_id,edit)
+    get_student_id = txt_student_id.get()
+    get_student_name = txt_student_name.get()
 
-    if ((name.find("Not")!= -1 or student_id.find("Not")!= -1) or edit):
-        new_student_id, new_name = "",""
+    if (get_student_name!="" and get_student_name != ""):
+        set_text(txt_student_id,get_student_id)
+        set_text(txt_student_name, get_student_name)
 
-        while (new_student_id == "" or new_name == ""):
-            input_student_id = simpledialog.askstring(title="Student ID", prompt="Student ID")
-            input_student_name = simpledialog.askstring(title="Your English Name", prompt="Your Name")
+        btn_save.place_forget()
+        btn_save.config(state="disable")
 
-            new_student_id, new_name = input_student_id, input_student_name
-            print (new_student_id, new_name)
-
-        student_id, name = input_student_id, input_student_name
-        data["student_id"] = input_student_id
-        data["student_name"] = input_student_name
+        data = load_current_result()
+        data["student_id"] = get_student_id
+        data["student_name"] = get_student_name
 
         np.save("res.npy", data)
-        print ("Update information")
+        print("Update information")
 
-    if edit:
-        refresh()
+        txt_student_id.configure(bg="light gray")
+        txt_student_name.configure(bg="light gray")
 
+        btn_edit.place(x=345, y=110)
+        btn_edit.config(state="normal")
 
-    return student_id, name
+    else:
+        print("Null data")
+
+def editInformation ():
+    global txt_student_id, txt_student_name,btn_edit
+
+    txt_student_id.configure(bg="light pink")
+    txt_student_name.configure(bg="light pink")
+
+    btn_edit.place_forget()
+    btn_edit.config(state="disable")
+    btn_save.place(x=345, y=110)
+    btn_save.config(state="normal")
+
+    txt_student_id.configure(state='normal')
+    txt_student_name.configure(state='normal')
+    print ("here")
 
 #global variable
 total_score =0
@@ -83,12 +110,7 @@ n_problem = 4
 detail_score = [-1]*n_problem
 student_id,name ="Not connected!","Not connected!"
 
-
-
 root = Tk(className='GCI Lab - Auto Judge')
-root.withdraw()
-student_id,name = updateInformation(edit=False)
-root.deiconify()
 
 #setup font
 btn_font = tkFont.Font(family='Helvetica', size=10, weight=tkFont.BOLD)
@@ -114,16 +136,26 @@ canvas1.create_image(0, 0, image=bg, anchor="nw")
 btn_refresh = Button(main_frame,text="Refresh!",command = refresh,height= 2, width=22,bg="#3b5998", fg='white',font=btn_font, cursor="hand2")
 btn_refresh.place(x=230, y=366)
 
-btn_edit = Button(main_frame,text="Edit Information",command = updateInformation,height= 1, width=15,bg="#3b5998", fg='white',font=btn_font, cursor="hand2")
+btn_edit = Button(main_frame,text="Edit Information",command = editInformation,height= 1, width=15,bg="#3b5998", fg='white',font=btn_font, cursor="hand2")
 btn_edit.place(x=345, y=110)
+
+btn_save = Button(main_frame,text="Save!",command = saveInformation,height= 1, width=15,bg="#3b5998", fg='white',font=btn_font, cursor="hand2")
+btn_save.place(x=345, y=110)
+btn_save.place_forget()
 
 
 #username & student ID
-lb_student_id = Label(main_frame, text = "Student ID:" + student_id,font = btn_normal, fg="black",bg="#ffffff",height= 1, width=30,anchor="w",justify="left")
-lb_student_id.place(x =23, y = 85)
+lb_student_id = Label(main_frame, text = "Student ID:",font = btn_normal, fg="black",bg="#ffffff",height= 1, width=15,anchor="w",justify="left")
+lb_student_id.place(x =50, y = 85)
+txt_student_id = Entry(main_frame,width=25,bg="#f7f7f7",state="normal")
+txt_student_id.place(x =130, y = 87)
+#set_text(txt_student_id,student_id)
 
-lb_student_name = Label(main_frame, text = "Student Name:" +name,font = btn_normal, fg="black",bg="#ffffff",height= 1, width=30,anchor="w",justify="left")
+lb_student_name = Label(main_frame, text = "Student Name:",font = btn_normal, fg="black",bg="#ffffff",height= 1, width=30,anchor="w",justify="left")
 lb_student_name.place(x =23, y = 110)
+txt_student_name = Entry(main_frame,width=25,bg="#f7f7f7",state="normal")
+txt_student_name.place(x =130, y = 113)
+#set_text(txt_student_name,name)
 
 #total_score
 lb_total_score = Label(main_frame, text = "0",font = btn_score, fg="dark green",bg="#ffffff",height= 1, width=3)
