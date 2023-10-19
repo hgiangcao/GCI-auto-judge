@@ -32,7 +32,7 @@ def load_current_result():
     data["student_name"] = data_load_from_file.item().get("student_name")
 
     for i in range(4):
-        data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1)) + key_encode
+        data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1))
 
     return data
 def refresh():
@@ -54,9 +54,9 @@ def refresh():
 
     for i in range (n_problem):
         detail_score[i] = data["task_"+str(i+1)]
-        lb_detail_score[i].config(text=str(detail_score[i]))
+        lb_detail_score[i].config(text=str(detail_score[i]+key_encode))
 
-    lb_total_score.config(text=str(int(sum(detail_score)/n_problem)))
+    lb_total_score.config(text=str(round((sum(detail_score)+n_problem*key_encode)/n_problem,1)))
 
     return
 
@@ -139,7 +139,7 @@ btn_refresh.place(x=230, y=366)
 btn_edit = Button(main_frame,text="Edit Information",command = editInformation,height= 1, width=15,bg="#3b5998", fg='white',font=btn_font, cursor="hand2")
 btn_edit.place(x=345, y=110)
 
-btn_save = Button(main_frame,text="Save!",command = saveInformation,height= 1, width=15,bg="#3b5998", fg='white',font=btn_font, cursor="hand2")
+btn_save = Button(main_frame,text="Save!",command = saveInformation,height= 1, width=15,bg="red", fg='white',font=btn_font, cursor="hand2")
 btn_save.place(x=345, y=110)
 btn_save.place_forget()
 
@@ -158,8 +158,8 @@ txt_student_name.place(x =130, y = 113)
 #set_text(txt_student_name,name)
 
 #total_score
-lb_total_score = Label(main_frame, text = "0",font = btn_score, fg="dark green",bg="#ffffff",height= 1, width=3)
-lb_total_score.place(x = 525, y = 100)
+lb_total_score = Label(main_frame, text = "0",font = btn_score, fg="dark green",bg="#ffffff",height= 1, width=4)
+lb_total_score.place(x = 515, y = 100)
 
 #detail score
 lb_detail_score =[0]*n_problem
