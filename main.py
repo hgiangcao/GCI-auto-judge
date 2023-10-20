@@ -49,6 +49,9 @@ def refresh():
         name = "Not connected!"
         student_id = "Not connected!"
 
+    if (name.find("Not") !=-1 or student_id.find("Not") !=-1):
+        editInformation()
+
     set_text(txt_student_id, student_id)
     set_text(txt_student_name, name)
 
@@ -90,7 +93,11 @@ def saveInformation ():
         print("Null data")
 
 def editInformation ():
+    print ("Edit information")
+
     global txt_student_id, txt_student_name,btn_edit
+    txt_student_id.configure(state='normal')
+    txt_student_name.configure(state='normal')
 
     txt_student_id.configure(bg="light pink")
     txt_student_name.configure(bg="light pink")
@@ -99,10 +106,6 @@ def editInformation ():
     btn_edit.config(state="disable")
     btn_save.place(x=345, y=110)
     btn_save.config(state="normal")
-
-    txt_student_id.configure(state='normal')
-    txt_student_name.configure(state='normal')
-    print ("here")
 
 #global variable
 total_score =0
