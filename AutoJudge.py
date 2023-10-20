@@ -10,41 +10,6 @@ blank_data = {
             "task_3": -key_encode,
             "task_4": -key_encode,
         }
-def check_task_0 (fn_name,fn_student_id):
-    name ="Not connected!"
-    student_id = "Not connected!"
-    try:
-        name = fn_name()
-        student_id = fn_student_id()
-
-        if (name is None or student_id is None):
-            print ("Please enter your name and your student ID")
-            raise Exception("Please enter your name and your student ID")
-
-        #init data
-        data =blank_data
-
-        data_load_from_file = np.load("res.npy", allow_pickle=True)
-
-        data["student_id"] = data_load_from_file.item().get("student_id")
-        data["student_name"] = data_load_from_file.item().get("student_name")
-
-        for i in range (4):
-            data["task_"+str(i+1)] =  data_load_from_file.item().get("task_"+str(i+1))
-
-
-        #update new data
-        data["student_id"] = student_id
-        data["student_name"] = name
-
-        np.save("res.npy", data)
-
-        # print ("Task 0 is completed!. Congratulation. Keep solving other task! Good Luck!")
-        print ("Hello,",name,"(",student_id,").\nWelcome to the Advance Python Programming course.\nNow, time to solve the problems.\nGood Luck to you!")
-
-    except:
-        print("Task 0 is NOT CORRECT. CORRECT YOUR SOLUTION!")
-
 
 #load test
 
@@ -102,7 +67,9 @@ def check_task(fn,name_task):
             print("")
     #nomalize to 100
     score = int (score/nTest*100)
+    print("\n=========================================")
     print ("Your score for",name_task,"is:", score,"/100")
+    print("=========================================\n")
 
     #update task 1
     update_score(name_task,score)
