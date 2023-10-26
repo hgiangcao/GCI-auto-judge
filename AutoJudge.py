@@ -5,10 +5,10 @@ key_encode = 1234
 blank_data = {
             "student_id": "Not connected!",
             "student_name": "Not connected",
-            "task_1": -key_encode,
-            "task_2": -key_encode,
-            "task_3": -key_encode,
-            "task_4": -key_encode,
+            "task_1": -key_encode-1,
+            "task_2": -key_encode-1,
+            "task_3": -key_encode-1,
+            "task_4": -key_encode-1,
         }
 
 #load test
@@ -62,6 +62,7 @@ def check_task(fn,name_task):
         if (correct_answer == user_answer):
             score+=1
         else:
+            continue
             print("Input:",test ,".")
             print ("Expected answer:",correct_answer,".Your answer:",user_answer)
             print("")
@@ -71,7 +72,9 @@ def check_task(fn,name_task):
     print ("Your score for",name_task,"is:", score,"/100")
     print("=========================================\n")
 
+    score = score
+
     #update task 1
     update_score(name_task,score)
 
-    return score
+    return score # to reduce the -1 code

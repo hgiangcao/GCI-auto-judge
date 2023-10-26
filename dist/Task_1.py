@@ -1,16 +1,18 @@
 from AutoJudge import check_task
 
-def solve(number):
+def solve(arr):
+    l = len(arr)
+    max_value = arr[0]
+    for i in range (l):
+            if ( arr[i] > max_value):
+                max_value = arr[i]
 
-    ans = None
-
-    #Adding your code here
-
-
-    return ans
+    return max_value
 
 #===========          IMPORTANT!!!         =============#
 #=========== DO NOT MODIFY THE PART BELLOW =============#
 #===== The part bellow is used to grade your score. DO NOT MODIFY!!! ==========#
-check_task(solve,"task_4")
+check_task(solve,"task_1")
+
+
 

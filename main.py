@@ -9,10 +9,10 @@ key_encode = 1234
 blank_data = {
             "student_id": "Not connected!",
             "student_name": "Not connected",
-            "task_1": -key_encode,
-            "task_2": -key_encode,
-            "task_3": -key_encode,
-            "task_4": -key_encode,
+            "task_1": -key_encode-1,
+            "task_2": -key_encode-1,
+            "task_3": -key_encode-1,
+            "task_4": -key_encode-1,
         }
 
 def set_text(entry,text):
@@ -54,12 +54,26 @@ def refresh():
 
     set_text(txt_student_id, student_id)
     set_text(txt_student_name, name)
-
+    totalScore = 0
     for i in range (n_problem):
         detail_score[i] = data["task_"+str(i+1)]
-        lb_detail_score[i].config(text=str(detail_score[i]+key_encode))
 
-    lb_total_score.config(text=str(round((sum(detail_score)+n_problem*key_encode)/n_problem,1)))
+        d_score = detail_score[i]+key_encode
+        if (d_score < 0) : # not code yet
+            lb_detail_score[i].config(bg=colors[0])
+        elif (d_score == 0):
+            lb_detail_score[i].config(bg=colors[1])
+        elif (d_score<100):
+            lb_detail_score[i].config(bg=colors[2])
+        else: # 100
+            lb_detail_score[i].config(bg=colors[3])
+
+        d_score = max(0,d_score)
+        totalScore += d_score
+        lb_detail_score[i].config(text=str(d_score))
+
+
+    lb_total_score.config(text=str(round(totalScore/n_problem,1)))
 
     return
 
@@ -101,6 +115,7 @@ def editInformation ():
 
     txt_student_id.configure(bg="light pink")
     txt_student_name.configure(bg="light pink")
+    print("here here")
 
     btn_edit.place_forget()
     btn_edit.config(state="disable")
@@ -112,14 +127,18 @@ total_score =0
 n_problem = 4
 detail_score = [-1]*n_problem
 student_id,name ="Not connected!","Not connected!"
+colors=["antiquewhite4","crimson","chartreuse3","dark green"]
 
-root = Tk(className='GCI Lab - Auto Judge')
+root = Tk(className=' GCI Lab - Auto Judge')
+root.resizable(False, False)
+root.attributes("-topmost", True)
+
 
 #setup font
 btn_font = tkFont.Font(family='Helvetica', size=10, weight=tkFont.BOLD)
 btn_score = tkFont.Font(family='Helvetica', size=25, weight=tkFont.BOLD)
 btn_normal = tkFont.Font(family='Helvetica', size=11)
-btn_normal_bold = tkFont.Font(family='Helvetica', size=15, weight=tkFont.BOLD)
+btn_normal_bold = tkFont.Font(family='Helvetica', size=13, weight=tkFont.BOLD)
 
 # Set window size
 root.geometry("620x460")
@@ -173,9 +192,14 @@ for i in range (n_problem):
     lb_detail_task_name[i] = Label(main_frame, text=detail_task_name, font=btn_normal_bold, fg="black", bg="white", height=2, width=8, bd=1)
     lb_detail_task_name[i].place(y=190, x=startX + stepX * i)
 
-    lb_detail_score[i] = Label(main_frame, text = str(detail_score[i]),font = btn_normal_bold, fg="dark green",bg="light green",height= 4, width=8,bd=1)
+    lb_detail_score[i] = Label(main_frame, text = str(detail_score[i]),font = btn_normal_bold, fg="white",bg="light green",height= 4, width=8,bd=1)
     lb_detail_score[i].place(y = 235, x = startX + stepX*i)
 
 
+
 refresh()
+get_student_id = txt_student_id.get()
+get_student_name = txt_student_name.get()
+if (get_student_id.find("Not") !=-1 or get_student_name.find("Not") !=-1):
+    editInformation()
 root.mainloop()
