@@ -1,7 +1,12 @@
 from AutoJudge import check_task
 
 def solve(number):
-    return (number%5==0)
+    flag = True
+
+    #Add your code here
+
+
+    return flag
 
 #===========          IMPORTANT!!!         =============#
 #=========== DO NOT MODIFY THE PART BELLOW =============#

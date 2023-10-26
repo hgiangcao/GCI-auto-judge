@@ -1,7 +1,7 @@
 from AutoJudge import check_task
 
 def solve(number):
-    return (number%5==0)
+    return (number%15==0)
 
 #===========          IMPORTANT!!!         =============#
 #=========== DO NOT MODIFY THE PART BELLOW =============#

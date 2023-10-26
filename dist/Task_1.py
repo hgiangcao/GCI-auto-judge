@@ -1,11 +1,9 @@
 from AutoJudge import check_task
 
 def solve(arr):
-    l = len(arr)
-    max_value = arr[0]
-    for i in range (l):
-            if ( arr[i] > max_value):
-                max_value = arr[i]
+    max_value = -1
+
+    #Add your code here
 
     return max_value
 

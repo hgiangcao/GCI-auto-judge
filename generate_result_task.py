@@ -89,7 +89,6 @@ def generate_task_4_results():
             else:
                 ans-=1
 
-
         tests.append(number)
         answers.append(ans)
 
@@ -134,7 +133,9 @@ def generate_all_task_answer():
     dict_answer["task_"+str(i)+"_answer"] = generate_task_4_results()
     # dict_answer["task_"+i+"_answer"] =generate_task_5_results()
 
-    np.save("answer.npy", dict_answer)
+    dict_answer["test_name"] = "Exercises-2"
+
+    np.save("lib/lib.npy", dict_answer)
 
 
 generate_all_task_answer()

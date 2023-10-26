@@ -15,6 +15,21 @@ blank_data = {
             "task_4": -key_encode-1,
         }
 
+def load_test(test_name):
+    load_data = np.load("lib/lib.npy", allow_pickle=True)
+
+    answer = load_data.item().get(test_name+"_answer")
+
+    tests = answer ["test"] #load_data.item().get("test")
+    answers =  answer ["answer"] #load_data.item().get("answer")
+
+    return tests,answers
+def auto_judge():
+    global  n_problem
+    for i in range (1,n_problem+1):
+        name_task = "task_"+ str(i)
+        tests, answers = load_test(name_task)
+
 def set_text(entry,text):
     entry.configure(state='normal')
     entry.delete(0,END)
@@ -25,25 +40,32 @@ def set_text(entry,text):
 def load_current_result():
     data = blank_data
 
-    data_load_from_file = np.load("res.npy", allow_pickle=True)
+    data_load_from_file = np.load("lib/res.npy", allow_pickle=True)
 
 
     data["student_id"] = data_load_from_file.item().get("student_id")
     data["student_name"] = data_load_from_file.item().get("student_name")
 
+    print (data["student_id"],data["student_name"])
+
     for i in range(4):
         data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1))
+
+    data["test_name"] = data_load_from_file.item().get("test_name")
 
     return data
 def refresh():
 
-    global total_score,detail_score,lb_total_score,student_id,name,txt_student_id,txt_student_name,lb_detail_score
+    global total_score,detail_score,lb_total_score,student_id,name,txt_student_id,txt_student_name,lb_detail_score,lb_test_name
+
+    auto_judge()
 
     data =load_current_result()
 
     #random data
     name = data["student_name"]
     student_id = data["student_id"]
+    test_name = data["test_name"]
 
     if (name is None or student_id is None):
         name = "Not connected!"
@@ -54,6 +76,9 @@ def refresh():
 
     set_text(txt_student_id, student_id)
     set_text(txt_student_name, name)
+    print (test_name)
+    lb_test_name.config(text=test_name)
+
     totalScore = 0
     for i in range (n_problem):
         detail_score[i] = data["task_"+str(i+1)]
@@ -94,7 +119,7 @@ def saveInformation ():
         data["student_id"] = get_student_id
         data["student_name"] = get_student_name
 
-        np.save("res.npy", data)
+        np.save("lib/res.npy", data)
         print("Update information")
 
         txt_student_id.configure(bg="light gray")
@@ -127,6 +152,7 @@ total_score =0
 n_problem = 4
 detail_score = [-1]*n_problem
 student_id,name ="Not connected!","Not connected!"
+test_name = "Demo"
 colors=["antiquewhite4","crimson","chartreuse3","dark green"]
 
 root = Tk(className=' GCI Lab - Auto Judge')
@@ -144,7 +170,7 @@ btn_normal_bold = tkFont.Font(family='Helvetica', size=13, weight=tkFont.BOLD)
 root.geometry("620x460")
 #bg
 # Add image file
-bg = PhotoImage(file="bg_sm_new.png")
+bg = PhotoImage(file="lib/bg_sm_new.png")
 # Create Canvas
 
 main_frame  = Frame(root,width=620, height=460)
@@ -182,6 +208,9 @@ txt_student_name.place(x =130, y = 113)
 #total_score
 lb_total_score = Label(main_frame, text = "0",font = btn_score, fg="dark green",bg="#ffffff",height= 1, width=4)
 lb_total_score.place(x = 515, y = 100)
+
+lb_test_name = Label(main_frame, text = "Demo",font = btn_normal_bold, fg="blue",bg="#ffffff",height= 1, width=10)
+lb_test_name.place(x = 260, y = 163)
 
 #detail score
 lb_detail_score =[0]*n_problem

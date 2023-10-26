@@ -1,5 +1,5 @@
 import os
-from AutoJudge import check_task_0
+from lib.AutoJudge import check_task_0
 
 def Enter_Your_Name():
     name = input("Your name:")

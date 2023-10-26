@@ -1,12 +1,9 @@
 from AutoJudge import check_task
 
 def solve(number):
+    ans = number
 
-    while (number>0):
-        if(number%20==0):
-            return number
-        else:
-            number-=1
+    #Add your code here
 
     return number
 

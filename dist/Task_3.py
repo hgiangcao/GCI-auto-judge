@@ -1,12 +1,10 @@
 from AutoJudge import check_task
 
 def solve(number):
+    flag = False
 
-    flag = True
-    for i in range (2,number//2):
-           if (number%i==0):
-                flag = False
-                break
+    #Add your code here
+
 
     return flag
 
