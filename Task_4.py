@@ -1,4 +1,4 @@
-from AutoJudge import check_task_1
+from AutoJudge import check_task
 
 def solve(number):
 
