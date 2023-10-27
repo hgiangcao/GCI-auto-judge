@@ -11,3 +11,12 @@ blank_data = {
         }
 np.save("lib/res.npy", blank_data)
 
+
+blank_user_answer = {
+            "task_1_user_answer": None,
+            "task_2_user_answer": None,
+            "task_3_user_answer": None,
+            "task_4_user_answer": None,
+        }
+
+np.save("lib/user_answer.npy", blank_user_answer)

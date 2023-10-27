@@ -1,9 +1,9 @@
-from AutoJudge import check_task
+from AutoJudge import check_task_1
 
 def solve(number):
 
     while (number>0):
-        if(number%82==0):
+        if(number%41==0):
             return number
         else:
             number-=1

@@ -15,6 +15,34 @@ blank_data = {
             "task_4": -key_encode-1,
         }
 
+blank_user_answer = {
+            "task_1_user_answer": None,
+            "task_2_user_answer": None,
+            "task_3_user_answer": None,
+            "task_4_user_answer": None,
+        }
+
+def load_current_result():
+    data = blank_data
+
+    data_load_from_file = np.load("lib/res.npy", allow_pickle=True)
+
+    data["student_id"] = data_load_from_file.item().get("student_id")
+    data["student_name"] = data_load_from_file.item().get("student_name")
+
+    for i in range(4):
+        data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1))
+
+    return data
+def save_data(data):
+    np.save("lib/res.npy", data)
+def update_score(task,score):
+    data = load_current_result()
+
+    data[task]= score-key_encode
+
+    save_data(data)
+
 def load_test(test_name):
     load_data = np.load("lib/lib.npy", allow_pickle=True)
 
@@ -24,11 +52,31 @@ def load_test(test_name):
     answers =  answer ["answer"] #load_data.item().get("answer")
 
     return tests,answers
+
+def load_user_answer(test_name):
+    load_data = np.load("lib/user_answer.npy", allow_pickle=True)
+
+    answer = load_data.item().get(test_name+"_user_answer")
+
+    return answer
+
 def auto_judge():
     global  n_problem
     for i in range (1,n_problem+1):
         name_task = "task_"+ str(i)
         tests, answers = load_test(name_task)
+        user_answers = load_user_answer(name_task)
+
+        if(user_answers is not None):
+            nTest = len(user_answers)
+            score = 0
+            for i in range(nTest):
+                user_answer = user_answers[i]
+                correct_answer = answers[i]
+                if (correct_answer == user_answer):
+                    score += 1
+            score = int(score / nTest * 100)
+            update_score(name_task,score)
 
 def set_text(entry,text):
     entry.configure(state='normal')

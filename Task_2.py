@@ -1,4 +1,4 @@
-from AutoJudge import check_task
+from AutoJudge import check_task_1
 
 def solve(number):
     return (number%15==0)

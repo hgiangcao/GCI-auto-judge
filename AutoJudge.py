@@ -11,28 +11,14 @@ blank_data = {
             "task_4": -key_encode-1,
         }
 
+blank_user_answer = {
+            "task_1_user_answer": None,
+            "task_2_user_answer": None,
+            "task_3_user_answer": None,
+            "task_4_user_answer": None,
+        }
+
 #load test
-
-def load_current_result():
-    data = blank_data
-
-    data_load_from_file = np.load("lib/res.npy", allow_pickle=True)
-
-    data["student_id"] = data_load_from_file.item().get("student_id")
-    data["student_name"] = data_load_from_file.item().get("student_name")
-
-    for i in range(4):
-        data["task_" + str(i + 1)] = data_load_from_file.item().get("task_" + str(i + 1))
-
-    return data
-def save_data(data):
-    np.save("lib/res.npy", data)
-def update_score(task,score):
-    data = load_current_result()
-
-    data[task]= score-key_encode
-
-    save_data(data)
 
 def load_test(test_name):
     load_data = np.load("lib/lib.npy", allow_pickle=True)
@@ -43,49 +29,21 @@ def load_test(test_name):
     answers =  answer ["answer"] #load_data.item().get("answer")
 
     return tests,answers
-def check_task(fn,name_task):
-
-    tests,answers = load_test(name_task)
-    nTest = len(answers)
-    score = 0
-
-    for i in range (nTest):
-        test = tests[i]
-        correct_answer = answers[i]
-
-        try:
-            user_answer = fn(test)
-        except Exception as e:
-            print (e)
-            user_answer = None
-
-        if (correct_answer == user_answer):
-            score+=1
-        else:
-            continue
-            print("Input:",test ,".")
-            print ("Expected answer:",correct_answer,".Your answer:",user_answer)
-            print("")
-    #nomalize to 100
-    score = int (score/nTest*100)
-    print("\n=========================================")
-    print ("Your score for",name_task,"is:", score,"/100")
-    print("=========================================\n")
-
-    score = score
-
-    #update task 1
-    update_score(name_task,score)
-
-    return score # to reduce the -1 code
 
 def update_answer(name_task,ans):
-    #user_answer.py
-    #read current user_answer.npy
-    #update answer of task_name
-    #save to file again
-    #
-def check_task_1(fn,name_task):
+    #print (ans)
+    user_answer = blank_user_answer
+    data_load_from_file = np.load("lib/user_answer.npy", allow_pickle=True)
+
+    for i in range (1,4+1):
+        user_answer["task_"+str(i)+"_user_answer"] = data_load_from_file.item().get("task_"+str(i)+"_user_answer")
+
+
+    user_answer[name_task + "_user_answer"] = ans
+    np.save("lib/user_answer.npy", user_answer)
+
+
+def check_task(fn,name_task):
 
     tests,answers = load_test(name_task)
     nTest = len(answers)
@@ -94,13 +52,15 @@ def check_task_1(fn,name_task):
 
     for i in range (nTest):
         test = tests[i]
-
+        user_answer = None
         try:
             user_answer = fn(test)
-            ans.append(user_answer)
+
         except Exception as e:
             print (e)
-            user_answer = None
+            # = None
+
+        ans.append(user_answer)
 
     #nomalize to 100
     print("\n=========================================")
